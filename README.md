@@ -1,6 +1,6 @@
-# lp2025-2
+# lp2026-1
 
-Turma de Laboratório de Programação UFPI 2025.2 (Departamento de Computação)
+Turma de Laboratório de Programação UFPI 2026.1 (Departamento de Computação)
 
 ## Introdução a Linguagem de Programação Python
 
