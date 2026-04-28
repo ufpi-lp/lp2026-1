@@ -32,7 +32,7 @@ jogo_forca
 Dentro dessa pasta, você deverá criar pelo menos dois arquivos:
 
 ```text
-foca.py
+forca.py
 palavras.txt
 ```
 
@@ -517,6 +517,6 @@ O exercício será avaliado considerando:
 
 O aluno deverá entregar um arquivo .zip contendo os dois arquivos abaixo:
 ```text
-foca.py
+forca.py
 palavras.txt
 ```
