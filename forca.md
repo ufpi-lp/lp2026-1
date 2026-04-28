@@ -1,5 +1,7 @@
 # Exercício — Implementação do Jogo da Forca em Python
 
+![Exemplo de Telas](https://github.com/ufpi-lp/lp2026-1/blob/main/forca.png)
+
 ## Objetivo da atividade
 
 Nesta atividade, você deverá implementar um **jogo da forca em modo terminal** utilizando a linguagem Python.
