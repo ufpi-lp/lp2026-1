@@ -30,6 +30,8 @@ Turma de Laboratório de Programação UFPI 2026.1 (Departamento de Computação
 
 [Introdução a Programação a Orientada Objetos](https://github.com/armandossrecife/lp2024-2/blob/main/docs/poo.md)
 
+[Rich: Terminal Bonito & Produtivo](https://github.com/ufpi-lp/lp2026-1/blob/main/rich_terminal_python.md)
+
 [Criando Gráficos 2d](https://github.com/armandossrecife/lp2024-2/blob/main/matplotlib_basic.ipynb) com a biblioteca [Matplotlib](https://matplotlib.org/)
 
 Introdução a biblioteca [Pandas](https://pandas.pydata.org/)
