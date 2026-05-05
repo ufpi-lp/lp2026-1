@@ -34,6 +34,8 @@ Turma de Laboratório de Programação UFPI 2026.1 (Departamento de Computação
 
 [Criando Gráficos 2d](https://github.com/armandossrecife/lp2024-2/blob/main/matplotlib_basic.ipynb) com a biblioteca [Matplotlib](https://matplotlib.org/)
 
+[Resumo Gráficos em Python](https://htmlpreview.github.io/?https://github.com/ufpi-lp/lp2026-1/blob/main/html/infografico_graficos_python.html)
+
 Introdução a biblioteca [Pandas](https://pandas.pydata.org/)
 
 Exemplo de Notebook com [exemplos de uso básico do Pandas](https://github.com/ufpi-lp/lp2025-2/blob/main/introducao_ao_pandas.ipynb)
