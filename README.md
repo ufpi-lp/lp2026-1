@@ -38,7 +38,7 @@ Turma de Laboratório de Programação UFPI 2026.1 (Departamento de Computação
 
 Introdução a biblioteca [Pandas](https://pandas.pydata.org/)
 
-[Infográfico sobre o Pandas](https://htmlpreview.github.io/?https://github.com/ufpi-lp/lp2026-1/blob/main/html/infografico_graficos_python.html)
+[Infográfico sobre o Pandas](https://htmlpreview.github.io/?https://github.com/ufpi-lp/lp2026-1/blob/main/html/infografico_pandas.html)
 
 Exemplo de Notebook com [exemplos de uso básico do Pandas](https://github.com/ufpi-lp/lp2025-2/blob/main/introducao_ao_pandas.ipynb)
 
