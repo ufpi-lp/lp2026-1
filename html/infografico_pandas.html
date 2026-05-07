@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infográfico Responsivo — Biblioteca Pandas do Python</title>
+  <meta name="description" content="Infográfico responsivo e detalhado sobre a biblioteca Pandas do Python, com conceitos, estruturas, leitura de dados, limpeza, análise, visualização e exemplos práticos." />
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --paper: #ffffff;
+      --ink: #17142f;
+      --muted: #5f667c;
+      --line: #e3e7f2;
+      --navy: #090b2e;
+      --purple: #6a35c5;
+      --purple-2: #8a5cf6;
+      --blue: #1677d2;
+      --cyan: #00a6c8;
+      --green: #2f8f45;
+      --orange: #f07822;
+      --yellow: #f2b705;
+      --red: #df4b4b;
+      --code: #0b1024;
+      --code-text: #e7eeff;
+      --shadow: 0 18px 45px rgba(18, 23, 55, .10);
+      --radius: 22px;
+      --radius-sm: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(138, 92, 246, .14), transparent 34rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 166, 200, .12), transparent 30rem),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg) 55%, #edf3ff 100%);
+      line-height: 1.55;
+    }
+
+    .page {
+      width: min(1220px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    header.hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+
+    .hero-card, .why-card, .section, .summary-card, .quick-card {
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(227, 231, 242, .85);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card {
+      padding: clamp(24px, 4vw, 48px);
+      position: relative;
+      min-height: 330px;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      right: -95px;
+      top: -75px;
+      background: linear-gradient(135deg, rgba(106, 53, 197, .18), rgba(0, 166, 200, .12));
+    }
+
+    .brand {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pandas-mark {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 12px 30px rgba(106, 53, 197, .13);
+    }
+
+    .bars {
+      width: 42px;
+      height: 50px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      align-items: end;
+    }
+
+    .bars span { border-radius: 4px; background: var(--purple); }
+    .bars span:nth-child(1) { height: 48px; background: #151238; }
+    .bars span:nth-child(2) { height: 18px; background: var(--purple-2); }
+    .bars span:nth-child(3) { height: 38px; background: var(--yellow); }
+    .bars span:nth-child(4) { height: 27px; background: var(--cyan); }
+
+    h1 {
+      font-size: clamp(2.35rem, 7vw, 5rem);
+      line-height: .92;
+      margin: 0;
+      letter-spacing: -0.08em;
+    }
+
+    .subtitle {
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      line-height: 1.15;
+      margin: 4px 0 18px;
+      font-weight: 800;
+      max-width: 760px;
+    }
+
+    .subtitle strong { color: var(--blue); }
+
+    .lead {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1.04rem;
+      margin: 0 0 20px;
+    }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+
+    .tag {
+      border: 1px solid rgba(106, 53, 197, .22);
+      background: rgba(106, 53, 197, .08);
+      color: #4a2594;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .why-card {
+      background: linear-gradient(160deg, #05072a 0%, #11194a 48%, #34216c 100%);
+      color: #fff;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .why-card h2 {
+      color: #fff;
+      margin: 0 0 18px;
+      font-size: clamp(1.25rem, 2vw, 1.65rem);
+    }
+
+    .why-list { display: grid; gap: 14px; }
+
+    .why-item {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.07);
+      border-radius: 16px;
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.14);
+      font-size: 1.45rem;
+    }
+
+    .why-item p { margin: 0; font-weight: 700; }
+
+    .toc {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 0 0 22px;
+    }
+
+    .toc a {
+      text-decoration: none;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-size: .88rem;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(18, 23, 55, .05);
+    }
+
+    .section {
+      margin: 18px 0;
+      padding: clamp(18px, 2.5vw, 28px);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .number {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--purple);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 1.05rem;
+      flex: 0 0 auto;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.2vw, 2rem);
+      line-height: 1.1;
+    }
+
+    h3 { margin: 0 0 10px; font-size: 1.12rem; }
+
+    .muted { color: var(--muted); }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+
+    .card, .mini-card, .format-card, .step, .practice-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: var(--radius-sm);
+      padding: 18px;
+    }
+
+    .card.feature { min-height: 100%; }
+
+    .card p, .mini-card p, .format-card p, .practice-card p { margin: 0; color: var(--muted); }
+
+    .accent-purple { color: var(--purple); }
+    .accent-blue { color: var(--blue); }
+    .accent-green { color: var(--green); }
+    .accent-orange { color: var(--orange); }
+    .accent-red { color: var(--red); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip { font-size: .8rem; font-weight: 800; border-radius: 999px; padding: 6px 9px; background: #f0edff; color: #4a2594; }
+
+    .table-visual {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid #d6daeb;
+      border-radius: 12px;
+      font-size: .86rem;
+      margin-top: 12px;
+    }
+
+    .table-visual th, .table-visual td { padding: 9px 10px; border-bottom: 1px solid #e7eaf3; text-align: left; }
+    .table-visual th { background: #f2f5ff; color: #272743; }
+    .table-visual tr:last-child td { border-bottom: 0; }
+    .table-visual td:first-child, .table-visual th:first-child { color: var(--purple); font-weight: 800; }
+
+    .series-box {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .index-col, .data-col {
+      display: grid;
+      gap: 6px;
+    }
+
+    .cell {
+      border: 1px solid #d6daeb;
+      background: #fbfcff;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 15px;
+      background: var(--code);
+      color: var(--code-text);
+      overflow-x: auto;
+      border-radius: 14px;
+      font-size: .87rem;
+      line-height: 1.55;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+    .token-comment { color: #8aa0c4; }
+    .token-func { color: #8fd1ff; }
+    .token-str { color: #f8c77e; }
+    .token-num { color: #b7ff9a; }
+
+    .format-card {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 170px;
+    }
+
+    .format-card .big-icon { font-size: 2.25rem; margin-bottom: 8px; }
+    .format-card strong { display: block; margin-bottom: 8px; }
+    .format-card code { background: #f3f5fc; padding: 3px 6px; border-radius: 8px; color: #33395c; }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .step {
+      position: relative;
+      min-height: 150px;
+    }
+
+    .step::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      right: -17px;
+      transform: translateY(-50%);
+      color: var(--purple);
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+
+    .step:last-child::after { display: none; }
+    .step b { display: block; margin-bottom: 8px; }
+    .step span { color: var(--muted); font-size: .92rem; }
+
+    .operation-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+
+    .op-card {
+      border: 1px solid #efe0d6;
+      background: linear-gradient(180deg, #fff 0%, #fff9f3 100%);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+
+    .op-card h3 { color: var(--orange); }
+
+    .advanced-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+
+    .advanced-card {
+      border: 1px solid #e3dcff;
+      background: linear-gradient(180deg, #fff 0%, #f9f6ff 100%);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+
+    .advanced-card h3 { color: var(--purple); }
+
+    .example-split {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .callout {
+      border-left: 5px solid var(--blue);
+      padding: 14px 16px;
+      background: #f0f7ff;
+      border-radius: 14px;
+      color: #23355f;
+      margin-top: 12px;
+    }
+
+    .callout strong { color: #123d78; }
+
+    .practice-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+
+    .practice-card { min-height: 150px; }
+    .practice-card .emoji { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .summary-card, .quick-card { padding: 18px; }
+    .quick-card ul { margin: 10px 0 0; padding-left: 20px; color: var(--muted); }
+    .quick-card li + li { margin-top: 6px; }
+
+    .bottom {
+      margin-top: 20px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #05072a 0%, #11194a 50%, #4d268d 100%);
+      color: #fff;
+      padding: 18px 22px;
+      text-align: center;
+      font-weight: 900;
+      letter-spacing: .01em;
+    }
+
+    .print-note {
+      color: var(--muted);
+      font-size: .86rem;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 1050px) {
+      header.hero, .example-split { grid-template-columns: 1fr; }
+      .grid-4, .grid-5, .advanced-grid, .practice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .workflow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .workflow .step:nth-child(3)::after { display: none; }
+      .operation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .page { width: min(100% - 18px, 1220px); padding-top: 14px; }
+      .hero-card, .why-card, .section { border-radius: 18px; padding: 18px; }
+      .brand { align-items: flex-start; }
+      .pandas-mark { width: 60px; height: 60px; }
+      .bars { width: 34px; height: 42px; }
+      .grid-2, .grid-3, .grid-4, .grid-5, .operation-grid, .advanced-grid, .practice-grid, .workflow { grid-template-columns: 1fr; }
+      .step::after { content: "↓"; right: 50%; top: auto; bottom: -23px; transform: translateX(50%); }
+      .workflow .step:nth-child(3)::after { display: block; }
+      .workflow .step:last-child::after { display: none; }
+      .toc { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
+      .toc a { white-space: nowrap; }
+      pre { font-size: .78rem; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page { width: 100%; padding: 0; }
+      .section, .hero-card, .why-card, .summary-card, .quick-card { box-shadow: none; break-inside: avoid; }
+      .toc, .print-note { display: none; }
+      pre { white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero" id="topo">
+      <section class="hero-card" aria-labelledby="titulo">
+        <div class="brand">
+          <div class="pandas-mark" aria-hidden="true"><div class="bars"><span></span><span></span><span></span><span></span></div></div>
+          <div>
+            <h1 id="titulo">pandas</h1>
+            <p class="subtitle">A biblioteca essencial para <strong>análise, limpeza, exploração e manipulação de dados</strong> no Python 🐍</p>
+          </div>
+        </div>
+        <p class="lead">
+          O Pandas é uma biblioteca open-source usada para trabalhar com conjuntos de dados em memória. Ele combina estruturas de dados eficientes, leitura de múltiplos formatos, limpeza, transformação, sumarização estatística e integração com NumPy, Matplotlib e ferramentas de Ciência de Dados.
+        </p>
+        <div class="tag-row" aria-label="Tópicos principais">
+          <span class="tag">Series</span><span class="tag">DataFrame</span><span class="tag">CSV / Excel / SQL / JSON</span><span class="tag">Limpeza de dados</span><span class="tag">EDA</span><span class="tag">Visualização</span><span class="tag">Machine Learning</span>
+        </div>
+      </section>
+
+      <aside class="why-card" aria-labelledby="por-que">
+        <h2 id="por-que">Por que usar o Pandas?</h2>
+        <div class="why-list">
+          <div class="why-item"><div class="icon">📊</div><p>Transforma dados brutos em tabelas prontas para análise.</p></div>
+          <div class="why-item"><div class="icon">🧹</div><p>Facilita limpeza, correção, padronização e remoção de duplicidades.</p></div>
+          <div class="why-item"><div class="icon">⚙️</div><p>Permite filtros, seleção, agregações, ordenação e transformação.</p></div>
+          <div class="why-item"><div class="icon">📈</div><p>Integra-se com Matplotlib para gráficos e análise exploratória.</p></div>
+          <div class="why-item"><div class="icon">🤖</div><p>Serve como base para pipelines de Ciência de Dados e Machine Learning.</p></div>
+        </div>
+      </aside>
+    </header>
+
+    <nav class="toc" aria-label="Navegação do infográfico">
+      <a href="#estruturas">1. Estruturas</a>
+      <a href="#leitura">2. Leitura</a>
+      <a href="#exploracao">3. Exploração</a>
+      <a href="#limpeza">4. Limpeza</a>
+      <a href="#manipulacao">5. Manipulação</a>
+      <a href="#avancado">6. Avançado</a>
+      <a href="#exemplos">7. Exemplos</a>
+      <a href="#boas-praticas">8. Boas práticas</a>
+    </nav>
+
+    <section class="section" id="estruturas">
+      <div class="section-title"><div class="number">1</div><h2>Estruturas de dados principais</h2></div>
+      <div class="grid-2">
+        <article class="card feature">
+          <h3 class="accent-purple">DataFrame — tabela bidimensional</h3>
+          <p>Estrutura com linhas, colunas e índices. É semelhante a uma planilha, tabela SQL ou matriz com rótulos.</p>
+          <table class="table-visual" aria-label="Exemplo visual de DataFrame">
+            <thead><tr><th>Índice</th><th>Nome</th><th>Idade</th><th>Cidade</th><th>Salário</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>Ana</td><td>25</td><td>São Paulo</td><td>5000</td></tr>
+              <tr><td>1</td><td>Bruno</td><td>30</td><td>Rio de Janeiro</td><td>6200</td></tr>
+              <tr><td>2</td><td>Clara</td><td>28</td><td>Belo Horizonte</td><td>5400</td></tr>
+            </tbody>
+          </table>
+          <pre><code>dados = {
+    'Nome': ['Ana', 'Bruno', 'Clara'],
+    'Idade': [25, 30, 28],
+    'Cidade': ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte']
+}
+df = pd.DataFrame(dados)</code></pre>
+        </article>
+
+        <article class="card feature">
+          <h3 class="accent-purple">Series — coluna unidimensional</h3>
+          <p>Estrutura com um conjunto de valores e um índice associado. Pode representar uma coluna de um DataFrame.</p>
+          <div class="series-box" aria-label="Exemplo visual de Series">
+            <div class="index-col"><div class="cell">0</div><div class="cell">1</div><div class="cell">2</div><div class="cell">3</div></div>
+            <div class="data-col"><div class="cell">10</div><div class="cell">20</div><div class="cell">30</div><div class="cell">40</div></div>
+          </div>
+          <pre><code>s = pd.Series([10, 20, 30, 40], name='votos')
+print(s.index)
+print(s.values)</code></pre>
+          <div class="callout"><strong>Dica:</strong> grande parte das operações do Pandas acontece sobre DataFrames e Series.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="leitura">
+      <div class="section-title"><div class="number" style="background:var(--blue)">2</div><h2>Leitura e escrita de dados</h2></div>
+      <p class="muted">O Pandas facilita a importação de dados de várias fontes e também a exportação dos resultados processados.</p>
+      <div class="grid-5" style="margin-top:16px">
+        <article class="format-card"><div><div class="big-icon">📄</div><strong>CSV</strong><p>Arquivos separados por vírgula, ponto e vírgula ou outro delimitador.</p></div><code>pd.read_csv()</code></article>
+        <article class="format-card"><div><div class="big-icon">📗</div><strong>Excel</strong><p>Planilhas .xlsx e .xls com abas e tabelas.</p></div><code>pd.read_excel()</code></article>
+        <article class="format-card"><div><div class="big-icon">🗄️</div><strong>SQL</strong><p>Consulta a bancos relacionais por conexão.</p></div><code>pd.read_sql()</code></article>
+        <article class="format-card"><div><div class="big-icon">🧾</div><strong>JSON</strong><p>Dados semiestruturados de APIs e arquivos.</p></div><code>pd.read_json()</code></article>
+        <article class="format-card"><div><div class="big-icon">🌐</div><strong>HTML</strong><p>Tabelas extraídas de páginas web.</p></div><code>pd.read_html()</code></article>
+      </div>
+      <div class="grid-2" style="margin-top:16px">
+        <article class="card">
+          <h3 class="accent-blue">Exemplo: lendo um CSV</h3>
+          <pre><code>import pandas as pd
+
+df = pd.read_csv(
+    'dados.csv',
+    sep=';',
+    encoding='utf-8'
+)
+
+print(df.head())</code></pre>
+        </article>
+        <article class="card">
+          <h3 class="accent-blue">Parâmetros úteis</h3>
+          <div class="chips"><span class="chip">sep=';'</span><span class="chip">encoding='latin1'</span><span class="chip">decimal=','</span><span class="chip">parse_dates=[]</span><span class="chip">usecols=[]</span><span class="chip">index_col=0</span></div>
+          <pre><code>colunas = ['ano', 'municipio', 'candidato', 'votos']
+df = pd.read_csv('eleicoes.csv', sep=';', usecols=colunas)</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="exploracao">
+      <div class="section-title"><div class="number" style="background:var(--green)">3</div><h2>Exploração inicial e análise descritiva</h2></div>
+      <div class="grid-4">
+        <article class="mini-card"><h3 class="accent-green">Visualizar amostras</h3><p>Primeiras, últimas ou linhas aleatórias.</p><pre><code>df.head()
+df.tail()
+df.sample(5)</code></pre></article>
+        <article class="mini-card"><h3 class="accent-green">Entender estrutura</h3><p>Dimensão, colunas, tipos e resumo.</p><pre><code>df.shape
+df.columns
+df.info()</code></pre></article>
+        <article class="mini-card"><h3 class="accent-green">Estatísticas</h3><p>Média, desvio, mínimo, máximo e quartis.</p><pre><code>df.describe()
+df['votos'].mean()
+df['votos'].sum()</code></pre></article>
+        <article class="mini-card"><h3 class="accent-green">Frequências</h3><p>Contagem de valores únicos por categoria.</p><pre><code>df['cidade'].unique()
+df['cidade'].nunique()
+df['cidade'].value_counts()</code></pre></article>
+      </div>
+      <div class="workflow" aria-label="Fluxo de ciência de dados com Pandas">
+        <div class="step"><b>1. Dados brutos</b><span>Arquivos, APIs, planilhas, bancos de dados ou dados públicos.</span></div>
+        <div class="step"><b>2. Leitura</b><span>Carregamento para DataFrames em memória.</span></div>
+        <div class="step"><b>3. Limpeza</b><span>Tratamento de nulos, erros, tipos e duplicidades.</span></div>
+        <div class="step"><b>4. EDA</b><span>Exploração, estatísticas, filtros e correlações.</span></div>
+        <div class="step"><b>5. Visualização</b><span>Gráficos para interpretar padrões e comunicar resultados.</span></div>
+        <div class="step"><b>6. Decisão</b><span>Relatórios, dashboards, modelos e produtos de dados.</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="limpeza">
+      <div class="section-title"><div class="number" style="background:var(--yellow); color:#271a00">4</div><h2>Limpeza e preparação dos dados</h2></div>
+      <div class="grid-3">
+        <article class="card"><h3 class="accent-orange">Dados ausentes</h3><p>Identifique células vazias ou valores NaN e escolha uma estratégia.</p><pre><code>df.isnull().sum()
+df.dropna()
+df.fillna(0)</code></pre></article>
+        <article class="card"><h3 class="accent-orange">Duplicidades</h3><p>Remova registros repetidos que podem distorcer os resultados.</p><pre><code>df.duplicated().sum()
+df = df.drop_duplicates()</code></pre></article>
+        <article class="card"><h3 class="accent-orange">Tipos de dados</h3><p>Converta colunas para tipos adequados: número, texto ou data.</p><pre><code>df['data'] = pd.to_datetime(df['data'])
+df['votos'] = df['votos'].astype(int)</code></pre></article>
+        <article class="card"><h3 class="accent-orange">Padronização textual</h3><p>Padronize maiúsculas, espaços e acentos conforme a necessidade.</p><pre><code>df['municipio'] = df['municipio'].str.strip().str.upper()</code></pre></article>
+        <article class="card"><h3 class="accent-orange">Renomear colunas</h3><p>Use nomes curtos e claros para simplificar consultas e gráficos.</p><pre><code>df = df.rename(columns={
+    'NM_MUNICIPIO': 'municipio',
+    'QT_VOTOS': 'votos'
+})</code></pre></article>
+        <article class="card"><h3 class="accent-orange">Salvar resultado limpo</h3><p>Exporte o DataFrame tratado para reuso em análises posteriores.</p><pre><code>df.to_csv('dados_limpos.csv', index=False)
+df.to_excel('dados_limpos.xlsx', index=False)</code></pre></article>
+      </div>
+    </section>
+
+    <section class="section" id="manipulacao">
+      <div class="section-title"><div class="number" style="background:var(--orange)">5</div><h2>Manipulação e transformação de dados</h2></div>
+      <div class="operation-grid">
+        <article class="op-card"><h3>Selecionar colunas</h3><p>Escolha uma ou mais colunas relevantes para análise.</p><pre><code>df['votos']
+df[['municipio', 'votos']]</code></pre></article>
+        <article class="op-card"><h3>Filtrar linhas</h3><p>Use condições booleanas ou consultas com query.</p><pre><code>df[df['votos'] &gt; 1000]
+df.query("municipio == 'TERESINA'")</code></pre></article>
+        <article class="op-card"><h3>Ordenar dados</h3><p>Organize registros por uma ou mais colunas.</p><pre><code>df.sort_values('votos', ascending=False)</code></pre></article>
+        <article class="op-card"><h3>Criar colunas</h3><p>Gere variáveis derivadas a partir de outras colunas.</p><pre><code>df['percentual'] = df['votos'] / df['votos'].sum() * 100</code></pre></article>
+        <article class="op-card"><h3>Agrupar dados</h3><p>Resuma dados por categoria, município, partido ou período.</p><pre><code>df.groupby('municipio')['votos'].sum()</code></pre></article>
+        <article class="op-card"><h3>Excluir colunas/linhas</h3><p>Remova atributos ou registros que não serão usados.</p><pre><code>df.drop(columns=['coluna_inutil'])
+df.drop(index=[0, 1])</code></pre></article>
+      </div>
+    </section>
+
+    <section class="section" id="avancado">
+      <div class="section-title"><div class="number">6</div><h2>Operações avançadas</h2></div>
+      <div class="advanced-grid">
+        <article class="advanced-card"><h3>Merge / Join</h3><p>Combina DataFrames usando chaves, como em bancos SQL.</p><pre><code>pd.merge(df_votos, df_cidades, on='municipio')</code></pre></article>
+        <article class="advanced-card"><h3>Concatenação</h3><p>Empilha DataFrames verticalmente ou horizontalmente.</p><pre><code>pd.concat([df_jan, df_fev], axis=0)</code></pre></article>
+        <article class="advanced-card"><h3>Pivot Table</h3><p>Cria tabelas dinâmicas para resumir dados por categorias.</p><pre><code>pd.pivot_table(df, values='votos', index='municipio', columns='cargo', aggfunc='sum')</code></pre></article>
+        <article class="advanced-card"><h3>Apply</h3><p>Aplica funções personalizadas em colunas ou linhas.</p><pre><code>df['faixa'] = df['idade'].apply(lambda x: 'adulto' if x &gt;= 18 else 'jovem')</code></pre></article>
+        <article class="advanced-card"><h3>Datas</h3><p>Extrai ano, mês, dia e calcula intervalos temporais.</p><pre><code>df['ano'] = df['data'].dt.year
+df['mes'] = df['data'].dt.month</code></pre></article>
+        <article class="advanced-card"><h3>Janelas móveis</h3><p>Calcula médias, somas e tendências em séries temporais.</p><pre><code>df['media_7d'] = df['vendas'].rolling(7).mean()</code></pre></article>
+        <article class="advanced-card"><h3>Correlação</h3><p>Identifica relações lineares entre variáveis numéricas.</p><pre><code>df.corr(numeric_only=True)</code></pre></article>
+        <article class="advanced-card"><h3>Pipeline</h3><p>Encadeia transformações para criar fluxos reprodutíveis.</p><pre><code>df_limpo = (df
+  .dropna()
+  .rename(columns=str.lower)
+  .sort_values('votos'))</code></pre></article>
+      </div>
+    </section>
+
+    <section class="section" id="exemplos">
+      <div class="section-title"><div class="number" style="background:var(--red)">7</div><h2>Novos exemplos práticos relacionados</h2></div>
+
+      <article class="card example-split">
+        <div>
+          <h3 class="accent-blue">Exemplo A — análise de votos por candidato</h3>
+          <p>Inspirado em dados eleitorais: selecionar colunas, filtrar município, agrupar por candidato e calcular total de votos.</p>
+          <div class="callout"><strong>Objetivo:</strong> descobrir os candidatos mais votados em uma cidade e criar uma tabela ordenada.</div>
+        </div>
+        <pre><code>colunas = ['NM_MUNICIPIO', 'NM_VOTAVEL', 'QT_VOTOS']
+teresina = df[colunas].query("NM_MUNICIPIO == 'TERESINA'")
+
+ranking = (teresina
+    .groupby('NM_VOTAVEL', as_index=False)['QT_VOTOS']
+    .sum()
+    .sort_values('QT_VOTOS', ascending=False))
+
+print(ranking.head(10))</code></pre>
+      </article>
+
+      <div class="grid-2" style="margin-top:16px">
+        <article class="card">
+          <h3 class="accent-green">Exemplo B — análise mensal de temperatura</h3>
+          <p>Criação de DataFrame a partir de dicionário, cálculo estatístico e gráfico simples.</p>
+          <pre><code>import pandas as pd
+import matplotlib.pyplot as plt
+
+meses = ['Jan','Fev','Mar','Abr','Mai','Jun']
+temperaturas = [31, 30, 29, 27, 25, 24]
+
+df_temp = pd.DataFrame({
+    'mes': meses,
+    'temperatura': temperaturas
+})
+
+print(df_temp.describe())
+df_temp.plot(x='mes', y='temperatura', kind='line', marker='o')
+plt.title('Temperaturas no semestre')
+plt.show()</code></pre>
+        </article>
+        <article class="card">
+          <h3 class="accent-green">Exemplo C — vendas por produto</h3>
+          <p>Agregação por categoria, cálculo de faturamento e ranking.</p>
+          <pre><code>df_vendas['faturamento'] = df_vendas['quantidade'] * df_vendas['preco']
+
+ranking_produtos = (df_vendas
+    .groupby('produto', as_index=False)['faturamento']
+    .sum()
+    .sort_values('faturamento', ascending=False))
+
+print(ranking_produtos.head())</code></pre>
+        </article>
+        <article class="card">
+          <h3 class="accent-purple">Exemplo D — presença de alunos</h3>
+          <p>Transformar registros de aula em indicadores de frequência.</p>
+          <pre><code>frequencia = (df_aulas
+    .groupby('aluno', as_index=False)['presente']
+    .mean())
+
+frequencia['percentual'] = frequencia['presente'] * 100
+frequencia['situacao'] = frequencia['percentual'].apply(
+    lambda x: 'OK' if x &gt;= 75 else 'Atenção'
+)</code></pre>
+        </article>
+        <article class="card">
+          <h3 class="accent-purple">Exemplo E — notas de uma turma</h3>
+          <p>Calcular média final, situação e estatísticas da turma.</p>
+          <pre><code>df_notas['media'] = df_notas[['prova1', 'prova2', 'trabalho']].mean(axis=1)
+df_notas['situacao'] = df_notas['media'].apply(
+    lambda m: 'Aprovado' if m &gt;= 7 else 'Recuperação'
+)
+
+print(df_notas['media'].describe())
+print(df_notas['situacao'].value_counts())</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="boas-praticas">
+      <div class="section-title"><div class="number" style="background:#b7791f">8</div><h2>Boas práticas para trabalhar com Pandas</h2></div>
+      <div class="practice-grid">
+        <article class="practice-card"><span class="emoji">🔍</span><h3>Conheça seus dados</h3><p>Use <code>head()</code>, <code>info()</code>, <code>describe()</code> e <code>value_counts()</code> antes de transformar.</p></article>
+        <article class="practice-card"><span class="emoji">🧼</span><h3>Limpe antes de analisar</h3><p>Dados ausentes, tipos errados e duplicidades podem comprometer conclusões.</p></article>
+        <article class="practice-card"><span class="emoji">🏷️</span><h3>Nomeie bem</h3><p>Prefira colunas em minúsculas, sem espaços e com nomes claros.</p></article>
+        <article class="practice-card"><span class="emoji">📌</span><h3>Use <code>.loc</code></h3><p>Evite ambiguidades ao alterar subconjuntos do DataFrame.</p></article>
+        <article class="practice-card"><span class="emoji">🧾</span><h3>Documente passos</h3><p>Comentários e pipelines tornam a análise mais reprodutível e didática.</p></article>
+      </div>
+    </section>
+
+    <section class="footer-grid" aria-label="Resumo e guia rápido">
+      <article class="summary-card">
+        <h3 class="accent-blue">Resumo</h3>
+        <p class="muted">Pandas é uma ferramenta central para quem trabalha com dados em Python. Ele permite carregar, explorar, limpar, transformar, resumir e visualizar dados de forma eficiente e produtiva.</p>
+      </article>
+      <article class="quick-card">
+        <h3 class="accent-purple">Quando usar?</h3>
+        <ul>
+          <li>Análise exploratória de dados.</li>
+          <li>Limpeza e preparação de datasets.</li>
+          <li>Relatórios, gráficos e tabelas resumidas.</li>
+          <li>Pré-processamento para Machine Learning.</li>
+        </ul>
+      </article>
+      <article class="quick-card">
+        <h3 class="accent-green">Mini checklist</h3>
+        <ul>
+          <li>Carreguei os dados corretamente?</li>
+          <li>Verifiquei tipos, nulos e duplicados?</li>
+          <li>Filtrei somente as colunas necessárias?</li>
+          <li>Salvei o dataset limpo?</li>
+        </ul>
+      </article>
+    </section>
+
+    <div class="bottom">⭐ Pandas + Python = poder para transformar dados em informação, aprendizado e decisões! 🐍</div>
+    <p class="print-note">Arquivo HTML responsivo, pronto para abrir no navegador, projetar em aula ou imprimir em PDF.</p>
+  </main>
+</body>
+</html>
