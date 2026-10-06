@@ -1,4 +1,4 @@
-# Exercício — Implementação do Jogo da Forca em Python
+# Implementação do Jogo da Forca em Python
 
 ![Exemplo de Telas](https://github.com/ufpi-lp/lp2026-1/blob/main/forca.png)
 
@@ -515,7 +515,7 @@ O exercício será avaliado considerando:
 
 # Entrega
 
-O aluno deverá entregar um arquivo .zip contendo os dois arquivos abaixo:
+O aluno deverá entregar um arquivo .zip contendo, pelo menos, os dois arquivos abaixo:
 ```text
 forca.py
 palavras.txt
